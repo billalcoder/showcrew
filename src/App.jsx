@@ -6,6 +6,7 @@ import { ProductProvider } from './context/ProductContext'
 import { Hero } from './pages/Hero'
 import Branding from './components/Branding'
 import {ProductSection} from './components/MenWatchSection'
+import Footer from './components/Footer'
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
           description="Upto 50% Off On Fragrances | BEST QUALITY | GOOD"
           category="beauty"
         />
+        <Footer/>
       </ProductProvider>
 
       {/* <video src={viteLogo} autoPlay controls></video> */}
