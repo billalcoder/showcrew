@@ -3,7 +3,7 @@ import './App.css'
 import { Navbar } from './pages/Navbar'
 import { Outlet } from 'react-router-dom'
 import { ProductProvider } from './context/ProductContext'
-import { Hero } from './pages/hero'
+import { Hero } from './pages/Hero'
 import Branding from './components/Branding'
 import {ProductSection} from './components/MenWatchSection'
 
