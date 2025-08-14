@@ -38,7 +38,7 @@ export function Navbar() {
                 </button>
 
                 {/* Logo */}
-                <Link to={"http://localhost:5173/"}><div className="logo md:text-2xl font-bold tracking-wider sm:text-lg">SHOECREW</div></Link>
+                <Link to={"https://showcrew.netlify.app"}><div className="logo md:text-2xl font-bold tracking-wider sm:text-lg">SHOECREW</div></Link>
 
                 {/* Right - Login/Cart */}
                 <div className="md:text-2xl sm:text-lg flex items-center gap-4">
