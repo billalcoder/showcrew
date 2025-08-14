@@ -35,12 +35,13 @@ export default function Branding() {
           <Link
             key={brand.id}
             to={`/brand/${encodeURIComponent(brand.brand)}`}
+            state={brand.category}
             className="text-center group"
           >
             <img
               src={brand.thumbnail}
               alt={brand.title}
-              className="mx-auto h-48 object-contain transition-transform duration-300 group-hover:scale-110"
+              className="mx-auto h-48 object-scale-down transition-transform duration-300 group-hover:scale-110"
             />
             <h3 className="mt-3 text-sm font-bold uppercase">
               {brand.brand}

@@ -6,6 +6,7 @@ const ProductContext = createContext();
 // 2️⃣ Provider component
 export const ProductProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
+  const [cart , setCart] = useState([])
   const [loading, setLoading] = useState(true);
 
   // Fetch data once
@@ -13,7 +14,6 @@ export const ProductProvider = ({ children }) => {
     fetch("https://dummyjson.com/products")
       .then(res => res.json())
       .then(data => {
-        console.log(data);
         setProducts(data.products || []);
         setLoading(false);
       })
@@ -24,7 +24,7 @@ export const ProductProvider = ({ children }) => {
   }, []);
 
   return (
-    <ProductContext.Provider value={{ products, loading }}>
+    <ProductContext.Provider value={{ products, loading , setCart , cart }}>
       {children}
     </ProductContext.Provider>
   );
