@@ -28,11 +28,11 @@ export default function Product() {
             {/* Top section */}
             <div className="grid md:grid-cols-2 gap-8">
                 {/* Left: Image carousel */}
-                <div>
+                <div className="max-w-full overflow-hidden">
                     <Swiper
                         spaceBetween={10}
                         navigation={true}
-                        thumbs={{ swiper: thumbsSwiper }}
+                        // thumbs={{ swiper: thumbsSwiper }}
                         modules={[Navigation, Thumbs]}
                         loop={true}
                         className="rounded-lg overflow-hidden"
@@ -61,7 +61,7 @@ export default function Product() {
                                 <img
                                     src={img}
                                     alt={product.title}
-                                    className="w-full h-[80px] object-scale-down rounded border cursor-pointer"
+                                    className="w-full max-h-[80px] object-contain rounded border cursor-pointer mx-auto"
                                 />
                             </SwiperSlide>
                         ))}
@@ -146,9 +146,9 @@ export default function Product() {
                                     className="block border rounded-lg overflow-hidden"
                                 >
                                     <img
-                                        src={item.thumbnail}
-                                        alt={item.title}
-                                        className="w-full h-[200px] object-scale-down"
+                                        src={item.images[0]}
+                                        alt={product.title}
+                                        className="w-full max-h-[80px] object-contain rounded border cursor-pointer mx-auto"
                                     />
                                     <div className="p-3">
                                         <p className="text-sm font-semibold">{item.title}</p>
