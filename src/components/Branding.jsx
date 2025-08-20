@@ -33,13 +33,13 @@ export default function Branding() {
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8">
         {brandList.map((brand) => (
           <Link
-            key={brand.id}
+            key={brand._id}
             to={`/brand/${encodeURIComponent(brand.brand)}`}
             state={brand.category}
             className="text-center group"
           >
             <img
-              src={brand.thumbnail}
+              src={brand.images[0]}
               alt={brand.title}
               className="mx-auto h-48 object-scale-down transition-transform duration-300 group-hover:scale-110"
             />

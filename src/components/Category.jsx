@@ -6,6 +6,7 @@ import Loader from "./Loader";
 export default function Category() {
   const data = useLocation();
   const { products, loading } = useProducts();
+  console.log(products);
   const [category, setCategory] = useState([]);
 
   useEffect(() => {

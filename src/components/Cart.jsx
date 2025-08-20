@@ -1,14 +1,90 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useProducts } from "../context/ProductContext";
+import { Link } from "react-router-dom";
 
 export default function Cart() {
+    const url = "https://showcrew-backend.onrender.com"
   const { cart, setCart } = useProducts();
 
-  const removeItem = (id) => {
-    setCart((prev) => prev.filter((item) => item.id !== id));
+  async function addToCart(product) {
+    try {
+      const res = await fetch(`${url}/cart/add`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ product, quantity: 1 }),
+      });
+      const data = await res.json();
+      if (data.cart) setCart(data.cart);
+    } catch (err) {
+      console.error("Failed to add item", err);
+    }
+  }
+
+  const fetchCart = async () => {
+    try {
+      const res = await fetch(`${url}/cart/`, {
+        credentials: "include",
+      });
+      const data = await res.json();
+      if (data.cart) setCart(data.cart);
+    } catch (err) {
+      console.error("Failed to load cart", err);
+    }
   };
 
-  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  useEffect(() => {
+    fetchCart();
+  }, []);
+
+  const removeItem = async (id) => {
+    try {
+      const res = await fetch(`${url}/cart/remove/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      const data = await res.json();
+      if (data.cart) setCart(data.cart);
+    } catch (err) {
+      console.error("Failed to remove item", err);
+    }
+  };
+
+  const total = cart.reduce(
+    (sum, item) =>
+      sum + (item.price ? item.price : item.product?.price || 0) * item.quantity,
+    0
+  );
+
+  // ✅ Place Order
+  const placeOrder = async () => {
+    const confirmOrder = window.confirm("Do you want to place this order?");
+    if (!confirmOrder) return;
+
+    try {
+      const res = await fetch(`${url}/order/place`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include", // pass cookies (sid)
+        body: JSON.stringify({
+          totalAmount: total,
+          paymentMethod: "COD", // Cash on Delivery
+          paymentStatus: "PENDING",
+        }),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        alert("✅ Order placed successfully!");
+        setCart([]); // clear local cart after successful order
+      } else {
+        alert("❌ " + data.error);
+      }
+    } catch (err) {
+      console.error("Failed to place order", err);
+      alert("Something went wrong while placing order");
+    }
+  };
 
   if (cart.length === 0) {
     return (
@@ -23,42 +99,43 @@ export default function Cart() {
       {/* Left: Cart Items */}
       <div className="md:col-span-2">
         <h2 className="text-2xl font-bold mb-4">Your Cart</h2>
-        {cart.map((item) => (
-          <div
-            key={item.id}
-            className="flex justify-between items-center border-b py-3"
-          >
-            <div className="flex items-center gap-4">
-              <img
-                src={item.thumbnail}
-                alt={item.title}
-                className="w-20 h-20 object-cover rounded"
-              />
-              <div>
-                <p className="font-semibold">{item.title}</p>
-                <p className="text-green-600 font-bold">
-                  ₹{item.price} × {item.quantity}
-                </p>
-              </div>
-            </div>
-            <button
-              onClick={() => removeItem(item.id)}
-              className="text-red-500 hover:underline"
+        {cart.map((item) => {
+          const product = item.product || item;
+          return (
+            <div
+              key={product._id || product.id}
+              className="flex justify-between items-center border-b py-3"
             >
-              ✖
-            </button>
-          </div>
-        ))}
-
-        {/* Buttons */}
-        {/* <div className="flex justify-between items-center mt-6">
-          <button className="border border-black px-4 py-2 font-medium hover:bg-gray-100">
-            ← CONTINUE SHOPPING
-          </button>
-          <button className="bg-gray-600 text-white px-4 py-2 font-medium rounded hover:bg-gray-700">
-            UPDATE CART
-          </button>
-        </div> */}
+              <Link to={`/product/${item.product.title}`} state={item.product}>
+                <div className="flex items-center gap-4">
+                  <img
+                    src={product.images[0]}
+                    alt={product.title}
+                    className="w-20 h-20 object-cover rounded"
+                  />
+                  <div>
+                    <p className="font-semibold">{product.title}</p>
+                    <p className="text-green-600 font-bold">
+                      ₹{product.price} × {item.quantity}
+                    </p>
+                    <button
+                      onClick={() => addToCart(product)}
+                      className="text-blue-500 text-sm hover:underline"
+                    >
+                      + Add one more
+                    </button>
+                  </div>
+                </div>
+              </Link>
+              <button
+                onClick={() => removeItem(item._id || item.id)}
+                className="text-red-500 hover:underline"
+              >
+                ✖
+              </button>
+            </div>
+          );
+        })}
       </div>
 
       {/* Right: Summary */}
@@ -72,20 +149,19 @@ export default function Cart() {
           <span>Total</span>
           <span>₹{total.toLocaleString("en-IN")}</span>
         </div>
-        <button className="w-full bg-black text-white py-3 mt-4 font-semibold rounded hover:opacity-90">
-          PROCEED TO CHECKOUT
-        </button>
-        <div className="mt-4 text-gray-600">
-          {/* <span className="inline-flex items-center">
-            <svg
-              className="w-4 h-4 mr-1 text-gray-500"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path d="M9.049 2.927C9.469 1.622 11.532 1.622 11.951 2.927L13.236 6.875C13.39 7.329 13.781 7.668 14.26 7.745L18.455 8.39C19.834 8.607 20.358 10.409 19.251 11.31L16.217 13.74C15.843 14.031 15.678 14.512 15.798 14.964L16.835 18.92C17.216 20.29 15.686 21.365 14.499 20.58L11.27 18.473C10.865 18.22 10.312 18.22 9.907 18.473L6.678 20.58C5.491 21.365 3.961 20.29 4.342 18.92L5.379 14.964C5.499 14.512 5.334 14.031 4.96 13.74L1.926 11.31C0.819 10.409 1.343 8.607 2.722 8.39L6.917 7.745C7.396 7.668 7.787 7.329 7.941 6.875L9.226 2.927H9.049z" />
-            </svg>
-            Coupon
-          </span> */}
+
+        {/* ✅ COD Button triggers order API */}
+        <div className="mt-4">
+          <button
+            onClick={placeOrder}
+            className="w-full bg-black text-white px-4 py-2 rounded hover:bg-gray-800"
+          >
+            Checkout with Cash on Delivery
+          </button>
+        </div>
+
+        <div className="mt-4 text-gray-600 text-sm">
+          Advance payment option coming soon...
         </div>
       </div>
     </div>

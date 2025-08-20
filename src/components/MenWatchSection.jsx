@@ -45,7 +45,7 @@ export  function ProductSection({ title, description, category }) {
 
             {/* Product Image */}
             <img
-              src={product.thumbnail}
+              src={product.images[0]}
               alt={product.title}
               className="w-full rounded-lg object-scale-down h-48"
             />

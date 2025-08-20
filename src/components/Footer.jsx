@@ -1,5 +1,7 @@
 // import { FaArrowUp } from "react-icons/fa";
 
+import { Link } from "react-router-dom";
+
 export default function Footer() {
   return (
     <footer className="bg-black text-white">
@@ -11,29 +13,17 @@ export default function Footer() {
         </div>
 
         {/* Store Policies */}
-        <div>
-          <h2 className="font-bold mb-4 uppercase tracking-widest">Store Policies</h2>
-          <ul className="space-y-2">
-            <li><a href="#" className="hover:text-gray-300">Homepage</a></li>
-            <li><a href="#" className="hover:text-gray-300">Watches</a></li>
-            <li><a href="#" className="hover:text-gray-300">Ladies Watches</a></li>
-            <li><a href="#" className="hover:text-gray-300">Sunglasses</a></li>
-            <li><a href="#" className="hover:text-gray-300">Men's Kicks</a></li>
-            <li><a href="#" className="hover:text-gray-300">Handbags</a></li>
-            <li><a href="#" className="hover:text-gray-300">Women's Kicks</a></li>
-            <li><a href="#" className="hover:text-gray-300">Contact Information</a></li>
-          </ul>
-        </div>
+    
 
         {/* Main Menu */}
         <div>
           <h2 className="font-bold mb-4 uppercase tracking-widest">Main Menu</h2>
           <ul className="space-y-2">
-            <li><a href="#" className="hover:text-gray-300">Privacy Policy</a></li>
-            <li><a href="#" className="hover:text-gray-300">Refund Policy</a></li>
-            <li><a href="#" className="hover:text-gray-300">Shipping Policy</a></li>
-            <li><a href="#" className="hover:text-gray-300">Terms and Conditions</a></li>
-            <li><a href="#" className="hover:text-gray-300">Contact Information</a></li>
+            <li><Link to={`PrivacyPolicy`} className="hover:text-gray-300">Privacy Policy</Link></li>
+            <li><Link to={`ReturnRefundPolicy`} className="hover:text-gray-300">Refund Policy</Link></li>
+            <li><Link to={`ShippingPolicy`} className="hover:text-gray-300">Shipping Policy</Link></li>
+            <li><Link to={`TermsAndConditions`} className="hover:text-gray-300">Terms and Conditions</Link></li>
+            <li><Link to={`Contact`} className="hover:text-gray-300">Contact Information</Link></li>
           </ul>
         </div>
 

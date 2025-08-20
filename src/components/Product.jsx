@@ -6,10 +6,28 @@ import { Navigation, Thumbs } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/thumbs";
+// import { addToCart } from "./Cart";
 
 export default function Product() {
+
+    async function addToCart(product) {
+        try {
+            const res = await fetch("https://showcrew-backend.onrender.com/cart/add", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+                body: JSON.stringify({ product, quantity: 1 }),
+            });
+            const data = await res.json();
+            if (data.cart) {
+                setCart(data.cart); // sync with backend response
+            }
+        } catch (err) {
+            console.error("Failed to add item", err);
+        }
+    };
+
     const { state } = useLocation();
-    console.log(state);
     const { products, loading, setCart, cart } = useProducts();
     const [thumbsSwiper, setThumbsSwiper] = React.useState(null);
 
@@ -93,23 +111,15 @@ export default function Product() {
                     {/* Buttons */}
                     <div className="flex flex-col gap-3">
                         <button
-                            onClick={() => {
-                                setCart((prev) => {
-                                    const existing = prev.find((item) => item.id === product.id);
-                                    if (existing) {
-                                        return prev.map((item) =>
-                                            item.id === product.id
-                                                ? { ...item, quantity: item.quantity + 1 }
-                                                : item
-                                        );
-                                    }
-                                    return [...prev, { ...product, quantity: 1 }];
-                                });
+                            onClick={async () => {
+                               await addToCart(product)
+                                // console.log("object")
                             }}
                             className="bg-black text-white py-2 px-4 rounded"
                         >
                             Add to Cart
                         </button>
+
 
                         <button className="bg-green-500 text-white py-2 px-4 rounded">
                             <a

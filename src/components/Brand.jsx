@@ -5,7 +5,6 @@ import Loader from "./Loader";
 
 export default function Brand() {
   const data = useLocation();
-  console.log(data);
   const [category, setCategory] = useState([]);
   const { products, loading } = useProducts();
 console.log(category);
