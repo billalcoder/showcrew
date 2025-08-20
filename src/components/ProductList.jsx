@@ -8,7 +8,7 @@ export function ProductList() {
 
   const fetchProducts = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/products/all", {
+      const res = await axios.get("https://showcrew-backend.onrender.com/products/all", {
         withCredentials: true,
       });
       setProducts(res.data);
@@ -20,7 +20,7 @@ export function ProductList() {
   const deleteProduct = async (id) => {
     if (!window.confirm("Are you sure you want to delete this product?")) return;
     try {
-      const res = await axios.delete(`http://localhost:3000/products/${id}`, {
+      const res = await axios.delete(`https://showcrew-backend.onrender.com/products/${id}`, {
         withCredentials: true,
       });
       alert(res.data.message);
