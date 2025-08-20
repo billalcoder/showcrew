@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { State, City } from "country-state-city";
 
 export function AuthForm({ mode = "signup", onSubmit }) {
-  const url = "https://showcrew-backend.onrender.com"
+  const url = "hhttps://showcrew.netlify.app"
   const googleBtn = useRef(null);
   const {
     register,
@@ -52,7 +52,7 @@ export function AuthForm({ mode = "signup", onSubmit }) {
     try {
       if (!emailValue) return alert("Enter your email first!");
 
-      const res = await fetch(`${url}/user/send-otp`,{
+      const res = await fetch(`${url}/user/send-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: emailValue }),

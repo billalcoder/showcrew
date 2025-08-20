@@ -9,6 +9,7 @@ export default function ProductForm({ product, onSuccess }) {
     description: product?.description || "",
     category: product?.category || "",
     brand: product?.brand || "",
+    size: product?.size || "" // single selected size (string)
   });
 
   const [images, setImages] = useState([]);
@@ -39,13 +40,13 @@ export default function ProductForm({ product, onSuccess }) {
       if (product?._id) {
         // UPDATE
         res = await axios.put(
-          `https://showcrew-backend.onrender.com/products/${product._id}`,
+          `https://showcrew.netlify.app/products/${product._id}`,
           formData,
           { withCredentials: true }
         );
       } else {
         // CREATE
-        res = await axios.post("https://showcrew-backend.onrender.com/products", data, {
+        res = await axios.post("https://showcrew.netlify.app/products", data, {
           withCredentials: true,
           headers: { "Content-Type": "multipart/form-data" },
         });
@@ -61,6 +62,7 @@ export default function ProductForm({ product, onSuccess }) {
         description: "",
         category: "",
         brand: "",
+        size: "",
       });
       setImages([]);
 
@@ -72,6 +74,12 @@ export default function ProductForm({ product, onSuccess }) {
       setLoading(false);
     }
   };
+
+  // 🔹 Sizes for dropdown: 7 to 12 including decimals
+  const sizes = [];
+  for (let i = 7; i <= 12; i += 0.1) {
+    sizes.push(i.toFixed(1));
+  }
 
   return (
     <form
@@ -128,6 +136,22 @@ export default function ProductForm({ product, onSuccess }) {
         placeholder="Brand"
         className="w-full p-2 border rounded"
       />
+
+      {/* 🔹 Dropdown for sizes */}
+      <select
+        name="size"
+        value={formData.size}
+        onChange={handleChange}
+        className="w-full p-2 border rounded"
+      >
+        <option value="">Select Size (optional)</option>
+        {sizes.map((s) => (
+          <option key={s} value={s}>
+            {s}
+          </option>
+        ))}
+      </select>
+
       <input
         type="file"
         multiple
@@ -144,3 +168,4 @@ export default function ProductForm({ product, onSuccess }) {
     </form>
   );
 }
+
