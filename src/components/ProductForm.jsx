@@ -50,7 +50,20 @@ export default function ProductForm({ product, onSuccess }) {
           headers: { "Content-Type": "multipart/form-data" },
         });
       }
+
       console.log(res.data);
+
+      // ✅ Reset form after success
+      setFormData({
+        title: "",
+        price: "",
+        stock: "",
+        description: "",
+        category: "",
+        brand: "",
+      });
+      setImages([]);
+
       if (onSuccess) onSuccess();
     } catch (err) {
       console.error(err);
