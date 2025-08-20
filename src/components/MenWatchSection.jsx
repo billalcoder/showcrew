@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 export  function ProductSection({ title, description, category }) {
   const { products, loading } = useProducts();
-
+console.log(products);
   if (loading) {
     return (
       <div className="max-w-6xl mx-auto text-center py-8">
@@ -52,6 +52,7 @@ export  function ProductSection({ title, description, category }) {
 
             {/* Product Title */}
             <h4 className="mt-3 font-medium text-gray-800">{product.title}</h4>
+            <h4 className="mt-3 font-medium text-gray-800">{product.size[0]}</h4>
 
             {/* Price */}
             <p className="mt-1 text-sm">

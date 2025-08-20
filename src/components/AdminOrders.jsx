@@ -92,6 +92,7 @@ const AdminOrders = () => {
                     <div className="flex-1">
                       <h4 className="font-medium text-gray-800">{item.product?.title}</h4>
                       <p className="text-sm text-gray-500">Qty: {item.quantity}</p>
+                      <p className="text-sm text-gray-500">SIZE: {item.size}</p>
                     </div>
 
                     {/* Price */}

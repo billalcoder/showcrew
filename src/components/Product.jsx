@@ -6,30 +6,34 @@ import { Navigation, Thumbs } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/thumbs";
-// import { addToCart } from "./Cart";
 
 export default function Product() {
-
+    const { state } = useLocation();
+    const { products, loading, setCart } = useProducts();
+    const [thumbsSwiper, setThumbsSwiper] = React.useState(null);
+    const [selectedSize, setSelectedSize] = React.useState("");
+    console.log(state);
     async function addToCart(product) {
         try {
             const res = await fetch("https://showcrew-backend.onrender.com/cart/add", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
-                body: JSON.stringify({ product, quantity: 1 }),
+                body: JSON.stringify({
+                    product: {
+                        ...product,
+                        ...(product.category.toLowerCase() === "shoes" && { size: selectedSize }) // send size if shoe
+                    },
+                    quantity: 1,
+                    size : selectedSize
+                }),
             });
             const data = await res.json();
-            if (data.cart) {
-                setCart(data.cart); // sync with backend response
-            }
+            if (data.cart) setCart(data.cart);
         } catch (err) {
             console.error("Failed to add item", err);
         }
-    };
-
-    const { state } = useLocation();
-    const { products, loading, setCart, cart } = useProducts();
-    const [thumbsSwiper, setThumbsSwiper] = React.useState(null);
+    }
 
     if (loading) return <p className="text-center py-10">Loading...</p>;
     if (!state) return <p className="text-center py-10">No product found.</p>;
@@ -50,7 +54,6 @@ export default function Product() {
                     <Swiper
                         spaceBetween={10}
                         navigation={true}
-                        // thumbs={{ swiper: thumbsSwiper }}
                         modules={[Navigation, Thumbs]}
                         loop={true}
                         className="rounded-lg overflow-hidden"
@@ -91,40 +94,59 @@ export default function Product() {
                     <h2 className="text-2xl font-bold mb-2">{product.title}</h2>
                     <div className="flex items-center gap-3 mb-4">
                         <span className="line-through text-gray-500">
-                            ₹{product.oldPrice || (product.price + 2000)}
+                            ₹{product.oldPrice || product.price + 2000}
                         </span>
                         <span className="text-green-600 font-bold text-xl">
                             ₹{product.price}
                         </span>
                     </div>
+
+                    {/* ✅ Show size dropdown only if shoe category */}
+                    {product.category?.toLowerCase() === "shoes" && (
+                        <div className="mb-4">
+                            <label className="block font-semibold mb-1">Select Size</label>
+                            <select
+                                className="border rounded px-3 py-2 w-full"
+                                value={selectedSize}
+                                onChange={(e) => setSelectedSize(e.target.value)}
+                            >
+                                <option value="">-- Choose Size --</option>
+                                {[7.1, 7.5, 8, 8.5, 9, 9.5, 10, 11, 12].map((s, idx) => (
+                                    <option key={idx} value={s}>
+                                        {s}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    )}
                     <div className="bg-yellow-100 p-3 rounded mb-4 text-sm">
                         ₹299 Advance | Rest Cash on Delivery Available 🚚
                     </div>
-
-                    {/* Quantity */}
-                    {/* <div className="flex items-center gap-2 mb-4">
-                        <button className="px-3 py-1 border rounded">-</button>
-                        <span>1</span>
-                        <button className="px-3 py-1 border rounded">+</button>
-                    </div> */}
 
                     {/* Buttons */}
                     <div className="flex flex-col gap-3">
                         <button
                             onClick={async () => {
-                               await addToCart(product)
-                                // console.log("object")
+                                if (
+                                    product.category?.toLowerCase() === "shoes" &&
+                                    !selectedSize
+                                ) {
+                                    alert("Please select a size first!");
+                                    return;
+                                }
+                                await addToCart(product);
                             }}
                             className="bg-black text-white py-2 px-4 rounded"
                         >
                             Add to Cart
                         </button>
 
-
                         <button className="bg-green-500 text-white py-2 px-4 rounded">
                             <a
                                 href={`https://wa.me/917420864014?text=${encodeURIComponent(
-                                    `*${product.title}*\n₹ ${product.price.toLocaleString("en-IN")}\n${window.location.href}`
+                                    `*${product.title}*\n₹ ${product.price.toLocaleString(
+                                        "en-IN"
+                                    )}\n${window.location.href}`
                                 )}`}
                                 target="_blank"
                                 rel="noopener noreferrer"

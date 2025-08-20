@@ -3,16 +3,16 @@ import { useProducts } from "../context/ProductContext";
 import { Link } from "react-router-dom";
 
 export default function Cart() {
-    const url = "https://showcrew-backend.onrender.com"
+  const url = "https://showcrew-backend.onrender.com"
   const { cart, setCart } = useProducts();
-
-  async function addToCart(product) {
+  console.log(cart);
+  async function addToCart(product, selectedSize) {
     try {
       const res = await fetch(`${url}/cart/add`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({ product, quantity: 1 }),
+        body: JSON.stringify({ product, quantity: 1, size: selectedSize }),
       });
       const data = await res.json();
       if (data.cart) setCart(data.cart);
@@ -58,33 +58,42 @@ export default function Cart() {
 
   // ✅ Place Order
   const placeOrder = async () => {
-    const confirmOrder = window.confirm("Do you want to place this order?");
-    if (!confirmOrder) return;
+  const confirmOrder = window.confirm("Do you want to place this order?");
+  if (!confirmOrder) return;
 
-    try {
-      const res = await fetch(`${url}/order/place`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include", // pass cookies (sid)
-        body: JSON.stringify({
-          totalAmount: total,
-          paymentMethod: "COD", // Cash on Delivery
-          paymentStatus: "PENDING",
-        }),
-      });
+  try {
+    const res = await fetch(`${url}/order/place`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include", // pass cookies (sid)
+      body: JSON.stringify({
+        totalAmount: total,
+        paymentMethod: "COD",
+        paymentStatus: "PENDING",
 
-      const data = await res.json();
-      if (res.ok) {
-        alert("✅ Order placed successfully!");
-        setCart([]); // clear local cart after successful order
-      } else {
-        alert("❌ " + data.error);
-      }
-    } catch (err) {
-      console.error("Failed to place order", err);
-      alert("Something went wrong while placing order");
+        // ✅ send cart with size info
+        cart: cart.map((item) => ({
+          product: item.product._id,
+          quantity: item.quantity,
+          size: item.size || null, // only if exists
+          priceAtPurchase: item.product.price,
+        })),
+      }),
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      alert("✅ Order placed successfully!");
+      setCart([]); // clear local cart after successful order
+    } else {
+      alert("❌ " + data.error);
     }
-  };
+  } catch (err) {
+    console.error("Failed to place order", err);
+    alert("Something went wrong while placing order");
+  }
+};
+
 
   if (cart.length === 0) {
     return (
@@ -106,7 +115,7 @@ export default function Cart() {
               key={product._id || product.id}
               className="flex justify-between items-center border-b py-3"
             >
-              <Link to={`/product/${item.product.title}`} state={item.product}>
+              <Link to={`/product/${product.title}`} state={product}>
                 <div className="flex items-center gap-4">
                   <img
                     src={product.images[0]}
@@ -115,11 +124,17 @@ export default function Cart() {
                   />
                   <div>
                     <p className="font-semibold">{product.title}</p>
+
+                    {/* 👟 Show size if available */}
+                    {item.size && (
+                      <p className="text-sm text-gray-600">Size: {item.size}</p>
+                    )}
+
                     <p className="text-green-600 font-bold">
                       ₹{product.price} × {item.quantity}
                     </p>
                     <button
-                      onClick={() => addToCart(product)}
+                      onClick={() => addToCart(product, item.size)} // keep same size if adding again
                       className="text-blue-500 text-sm hover:underline"
                     >
                       + Add one more

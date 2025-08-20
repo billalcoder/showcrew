@@ -51,6 +51,7 @@ console.log(category);
               <div className="p-4">
                 <p className="text-gray-500 text-xs uppercase">{item.brand}</p>
                 <h3 className="text-sm font-medium mt-1">{item.title}</h3>
+                <h3 className="text-sm font-medium mt-1">SIZE : {item?.size}</h3>
                 <div className="mt-2">
                   <span className="text-gray-400 line-through mr-2">
                     {/* ₹{item.price} */}
