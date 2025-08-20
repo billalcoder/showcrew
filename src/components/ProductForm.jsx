@@ -39,13 +39,13 @@ export default function ProductForm({ product, onSuccess }) {
       if (product?._id) {
         // UPDATE
         res = await axios.put(
-          `http://localhost:3000/products/${product._id}`,
+          `https://showcrew-backend.onrender.com/products/${product._id}`,
           formData,
           { withCredentials: true }
         );
       } else {
         // CREATE
-        res = await axios.post("http://localhost:3000/products", data, {
+        res = await axios.post("https://showcrew-backend.onrender.com/products", data, {
           withCredentials: true,
           headers: { "Content-Type": "multipart/form-data" },
         });
