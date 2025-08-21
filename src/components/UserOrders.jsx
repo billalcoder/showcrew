@@ -19,24 +19,61 @@ const UserOrders = () => {
     fetchMyOrders();
   }, []);
 
-  return (
+return (
     <div className="p-6 mt-30">
-      <h2 className="text-xl font-bold mb-4">My Orders</h2>
+      <h2 className="text-xl font-bold mb-4">All Orders (Admin)</h2>
       {orders.length === 0 ? (
         <p>No orders found</p>
       ) : (
         <div className="space-y-4">
           {orders.map((order) => (
             <div key={order._id} className="p-4 border rounded-xl shadow">
-              <p><strong>Order ID:</strong> {order._id}</p>
-              <p><strong>Status:</strong> {order.orderStatus}</p>
-              <p><strong>Total:</strong> ₹{order.totalAmount}</p>
-              <p><strong>Payment:</strong> {order.paymentMethod} ({order.paymentStatus})</p>
+              <p>
+                <strong>User:</strong> {order.user?.fullname} ({order.user?.email})
+              </p>
+              <p>
+                <strong>Status:</strong> {order.orderStatus}
+              </p>
+              <p>
+                <strong>Total:</strong> ₹{order.totalAmount}
+              </p>
+              <p>
+                <strong>Payment:</strong> {order.paymentMethod} ({order.paymentStatus})
+              </p>
+
+              {/* Shipping Address */}
+              <div className="mt-2">
+                <h4 className="font-semibold">Shipping Address:</h4>
+                <p>{order.shippingAddress?.streetAddress}, {order.shippingAddress?.city}, {order.shippingAddress?.state}</p>
+                <p>Phone: {order.shippingAddress?.number}</p>
+              </div>
+
+              {/* Items */}
               <h4 className="mt-2 font-semibold">Items:</h4>
               <ul className="list-disc ml-5">
                 {order.items.map((item) => (
-                  <li key={item._id}>
-                    {item.product?.name} × {item.quantity} — ₹{item.priceAtPurchase}
+                  <li
+                    key={item._id}
+                    className="flex items-center gap-4 p-3 border-b border-gray-200 last:border-none"
+                  >
+                    {/* Product Image */}
+                    <img
+                      src={item?.product?.images[0]}
+                      alt={item.product?.title}
+                      className="w-16 h-16 object-cover rounded-md shadow-sm"
+                    />
+
+                    {/* Product Info */}
+                    <div className="flex-1">
+                      <h4 className="font-medium text-gray-800">{item.product?.title}</h4>
+                      <p className="text-sm text-gray-500">Qty: {item.quantity}</p>
+                      <p className="text-sm text-gray-500">SIZE: {item.size}</p>
+                    </div>
+
+                    {/* Price */}
+                    <span className="text-gray-900 font-semibold">
+                      ₹{item.priceAtPurchase}
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -46,6 +83,6 @@ const UserOrders = () => {
       )}
     </div>
   );
-};
+}
 
 export default UserOrders;
