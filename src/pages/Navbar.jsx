@@ -89,13 +89,13 @@ export function Navbar() {
                     {user ? (
                         <>
                             {user.role[0] === "admin" ? (
-                                
-                                    <Link to="/admin/order" className="hidden sm:inline">SEE ORDERS</Link>
-                                
+
+                                <Link to="/admin/order" className="hidden sm:inline">SEE ORDERS</Link>
+
                             ) : (
-                                
-                                    <Link to="/user/order" className="hidden sm:inline">TRACK ORDERS</Link>
-                                
+
+                                <Link to="/user/order" className="hidden sm:inline">TRACK ORDERS</Link>
+
                             )}
                             <div onClick={handleLogout}>LOGOUT</div>
                         </>
@@ -157,7 +157,7 @@ export function Navbar() {
                         <ul className="flex flex-col gap-4">
                             {categories.map((cat, idx) => (
                                 <li key={idx} className="capitalize cursor-pointer">
-                                    {cat}
+                                    <Link to={`brand/${cat}`} state={cat} key={idx}>{cat}</Link>
                                 </li>
                             ))}
 

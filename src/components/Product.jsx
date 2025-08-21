@@ -25,7 +25,7 @@ export default function Product() {
                         ...(product.category.toLowerCase() === "shoes" && { size: selectedSize }) // send size if shoe
                     },
                     quantity: 1,
-                    size : selectedSize
+                    size: selectedSize
                 }),
             });
             const data = await res.json();
@@ -101,24 +101,27 @@ export default function Product() {
                         </span>
                     </div>
 
-                    {/* ✅ Show size dropdown only if shoe category */}
-                    {product.category?.toLowerCase() === "shoes" && (
-                        <div className="mb-4">
-                            <label className="block font-semibold mb-1">Select Size</label>
-                            <select
-                                className="border rounded px-3 py-2 w-full"
-                                value={selectedSize}
-                                onChange={(e) => setSelectedSize(e.target.value)}
-                            >
-                                <option value="">-- Choose Size --</option>
-                                {[7, 8, 9, 10, 11, 12].map((s, idx) => (
-                                    <option key={idx} value={s}>
-                                        {s}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                    )}
+                    {(product.category?.toLowerCase() === "menshoes" ||
+                        product.category?.toLowerCase() === "womenshoes") && (
+                            <div className="mb-4">
+                                <label className="block font-semibold mb-1">Select Size</label>
+                                <select
+                                    className="border rounded px-3 py-2 w-full"
+                                    value={selectedSize}
+                                    onChange={(e) => setSelectedSize(e.target.value)}
+                                >
+                                    <option value="">-- Choose Size --</option>
+                                    {(product.category?.toLowerCase() === "menshoes"
+                                        ? [7, 8, 9, 10, 11, 12] // men sizes
+                                        : [36, 37, 38, 39, 40, 41, 42] // women sizes
+                                    ).map((s, idx) => (
+                                        <option key={idx} value={s}>
+                                            {s}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                        )}
                     <div className="bg-yellow-100 p-3 rounded mb-4 text-sm">
                         ₹299 Advance | Rest Cash on Delivery Available 🚚
                     </div>
