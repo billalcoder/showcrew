@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { State, City } from "country-state-city";
 
 export function AuthForm({ mode = "signup", onSubmit }) {
-  const url = "hhttps://showcrew.netlify.app"
+  const url = "https://showcrew-backend.onrender.com"
   const googleBtn = useRef(null);
   const {
     register,
