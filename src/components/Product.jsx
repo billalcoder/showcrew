@@ -111,7 +111,7 @@ export default function Product() {
                                 onChange={(e) => setSelectedSize(e.target.value)}
                             >
                                 <option value="">-- Choose Size --</option>
-                                {[7.1, 7.5, 8, 8.5, 9, 9.5, 10, 11, 12].map((s, idx) => (
+                                {[7, 8, 9, 10, 11, 12].map((s, idx) => (
                                     <option key={idx} value={s}>
                                         {s}
                                     </option>
