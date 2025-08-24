@@ -1,6 +1,6 @@
 /*
 
-  Content-Security-Policy: default-src 'self'; script-src 'self' https://accounts.google.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://your-cdn.com; connect-src 'self' https://api.yourbackend.com; frame-src 'self' https://accounts.google.com; object-src 'none'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js https://checkout.razorpay.com/v1/checkout.js https://accounts.google.com sha256-aLNFOtZaO27QL04i8V7GiYXnBgLJ9Nf9wk58B9tgt88=; style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: https://your-cdn.com; connect-src 'self' https://api.yourbackend.com; frame-src 'self' https://accounts.google.com; object-src 'none'; upgrade-insecure-requests
 
   Referrer-Policy: no-referrer
   Cross-Origin-Embedder-Policy: require-corp
