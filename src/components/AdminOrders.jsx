@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 const AdminOrders = () => {
-   const url = "http://localhost:3000" //||"http://localhost:3000" "https://showcrew-backend.onrender.com"
+   const url = "https://showcrew-backend.onrender.com" //||"http://localhost:3000" "https://showcrew-backend.onrender.com"
   const [orders, setOrders] = useState([]);
   console.log(orders);
   // fetch orders
