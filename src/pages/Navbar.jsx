@@ -1,28 +1,30 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useProducts } from "../context/ProductContext";
 import { Link, useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion"; // 👈 for animation
 
 export function Navbar() {
-    const url = "https://showcrew-backend.onrender.com" //|| "http://localhost:3000" "https://showcrew-backend.onrender.com"
+    const url = "https://showcrew-backend.onrender.com";
     const { products, loading, cart } = useProducts();
     const [isOpen, setIsOpen] = useState(false);
     const [hoveredCategory, setHoveredCategory] = useState(null);
 
-    const [user, setUser] = useState(null); // ✅ full user from /user/profile
+    const [user, setUser] = useState(null);
     const navigate = useNavigate();
+    const menuRef = useRef(null); // 👈 to detect outside clicks
 
-    // ✅ check if user exists from backend
+    // ✅ Fetch user
     useEffect(() => {
         const fetchUser = async () => {
             try {
                 const res = await fetch(`${url}/user/profile`, {
                     method: "GET",
-                    credentials: "include", // 🔑 send cookies/session
+                    credentials: "include",
                 });
                 const data = await res.json();
 
                 if (res.ok && data) {
-                    setUser(data); // directly user object
+                    setUser(data);
                 } else {
                     setUser(null);
                 }
@@ -34,7 +36,7 @@ export function Navbar() {
         fetchUser();
     }, []);
 
-    // ✅ Logout handler
+    // ✅ Logout
     const handleLogout = async () => {
         try {
             await fetch(`${url}/user/logout`, {
@@ -42,11 +44,27 @@ export function Navbar() {
                 credentials: "include"
             });
             setUser(null);
-            navigate("/"); // ✅ go home after logout
+            navigate("/");
         } catch (err) {
             console.error("Logout failed:", err);
         }
     };
+
+    // ✅ Close when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (menuRef.current && !menuRef.current.contains(e.target)) {
+                setIsOpen(false);
+            }
+        };
+
+        if (isOpen) {
+            document.addEventListener("mousedown", handleClickOutside);
+        }
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [isOpen]);
 
     if (loading) {
         return (
@@ -56,10 +74,8 @@ export function Navbar() {
         );
     }
 
-    // Extract unique categories
+    // Categories + brands
     const categories = [...new Set(products.map(p => p.category))];
-
-    // Get brands for a category
     const getBrands = (category) => {
         return [...new Set(products.filter(p => p.category === category).map(p => p.brand))];
     };
@@ -68,7 +84,7 @@ export function Navbar() {
         <div className="shadow-md bg-white fixed top-0 left-0 w-full z-50">
             {/* TOP NAVBAR */}
             <nav className="flex justify-between items-center px-4 py-3 lg:mx-15 md:mx-15 text-sm">
-                {/* Hamburger for mobile */}
+                {/* Hamburger */}
                 <button
                     className="md:hidden text-2xl"
                     onClick={() => setIsOpen(!isOpen)}
@@ -84,26 +100,20 @@ export function Navbar() {
                     </div>
                 </Link>
 
-                {/* Right - Login/Logout + Cart (NO ORDERS here now ✅) */}
+                {/* Right Side */}
                 <div className="md:text-lg sm:text-base flex items-center gap-4">
                     {user ? (
                         <>
                             {user.role[0] === "admin" ? (
-
                                 <Link to="/admin/order" className="hidden sm:inline">SEE ORDERS</Link>
-
                             ) : (
-
                                 <Link to="/user/order" className="hidden sm:inline">TRACK ORDERS</Link>
-
                             )}
-                            <div onClick={handleLogout}>LOGOUT</div>
+                            <div onClick={handleLogout} className="cursor-pointer hover:text-red-500">LOGOUT</div>
                         </>
                     ) : (
                         <Link to="/signup">
-                            <span className="cursor-pointer hover:text-blue-500">
-                                LOGIN
-                            </span>
+                            <span className="cursor-pointer hover:text-blue-500">LOGIN</span>
                         </Link>
                     )}
 
@@ -151,43 +161,46 @@ export function Navbar() {
                     ))}
                 </ul>
 
-                {/* Mobile Categories + Orders ✅ */}
-                {isOpen && (
-                    <div className="md:hidden px-4 py-2 bg-white shadow-lg">
-                        <ul className="flex flex-col gap-4">
-                            {categories.map((cat, idx) => (
-                                <li key={idx} className="capitalize cursor-pointer">
-                                    <Link to={`brand/${cat}`} state={cat} key={idx}>{cat}</Link>
-                                </li>
-                            ))}
+                {/* MOBILE MENU with animation */}
+                <AnimatePresence>
+                    {isOpen && (
+                        <motion.div
+                            ref={menuRef}
+                            initial={{ y: -20, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            exit={{ y: -20, opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="md:hidden px-4 py-2 bg-white shadow-lg absolute w-full z-50"
+                        >
+                            <ul className="flex flex-col gap-4">
+                                {categories.map((cat, idx) => (
+                                    <li key={idx} className="capitalize cursor-pointer">
+                                        <Link to={`brand/${cat}`} state={cat}>{cat}</Link>
+                                    </li>
+                                ))}
 
-                            {user ? (
-                                <>
-                                    {user.role[0] === "admin" ? (
-                                        <li>
-                                            <Link to="/admin/order">SEE ORDERS</Link>
-                                        </li>
-                                    ) : (
-                                        <li>
-                                            <Link to="/user/order">TRACK ORDERS</Link>
-                                        </li>
-                                    )}
-                                    <li onClick={handleLogout}>LOGOUT</li>
-                                </>
-                            ) : (
+                                {user ? (
+                                    <>
+                                        {user.role[0] === "admin" ? (
+                                            <li><Link to="/admin/order">SEE ORDERS</Link></li>
+                                        ) : (
+                                            <li><Link to="/user/order">TRACK ORDERS</Link></li>
+                                        )}
+                                        <li onClick={handleLogout} className="cursor-pointer">LOGOUT</li>
+                                    </>
+                                ) : (
+                                    <li><Link to="/signup">LOGIN</Link></li>
+                                )}
+
                                 <li>
-                                    <Link to="/signup">LOGIN</Link>
+                                    <Link to="/cart">
+                                        CART ({cart.reduce((t, i) => t + i.quantity, 0)})
+                                    </Link>
                                 </li>
-                            )}
-
-                            <li>
-                                <Link to="/cart">
-                                    CART ({cart.reduce((t, i) => t + i.quantity, 0)})
-                                </Link>
-                            </li>
-                        </ul>
-                    </div>
-                )}
+                            </ul>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
         </div>
     );
