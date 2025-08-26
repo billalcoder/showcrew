@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 
 export default function ProtectedRoute({ children, isAuthenticated }) {
-    const url = "https://showcrew-backend.onrender.com"
+    const url = "https://showcrew-backend.onrender.com" //|| "http://localhost:3000" "https://showcrew-backend.onrender.com"
     const [user, setUser] = useState(null);
     useEffect(() => {
         const fetchUser = async () => {

@@ -3,7 +3,7 @@ import { useProducts } from "../context/ProductContext";
 import { Link, useNavigate } from "react-router-dom";
 
 export function Navbar() {
-    const url = "https://showcrew-backend.onrender.com"
+    const url = "https://showcrew-backend.onrender.com" //|| "http://localhost:3000" "https://showcrew-backend.onrender.com"
     const { products, loading, cart } = useProducts();
     const [isOpen, setIsOpen] = useState(false);
     const [hoveredCategory, setHoveredCategory] = useState(null);

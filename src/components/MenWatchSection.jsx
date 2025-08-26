@@ -47,7 +47,7 @@ console.log(products);
             <img
               src={product.images[0]}
               alt={product.title}
-              className="w-full rounded-lg object-scale-down h-48"
+              className="w-full rounded-lg object-cover h-48"
             />
 
             {/* Product Title */}

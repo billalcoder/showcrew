@@ -12,10 +12,10 @@ export default function Product() {
     const { products, loading, setCart } = useProducts();
     const [thumbsSwiper, setThumbsSwiper] = React.useState(null);
     const [selectedSize, setSelectedSize] = React.useState("");
-    console.log(state);
+    const url = "https://showcrew-backend.onrender.com" //||"http://localhost:3000" "https://showcrew-backend.onrender.com"
     async function addToCart(product) {
         try {
-            const res = await fetch("https://showcrew-backend.onrender.com/cart/add", {
+            const res = await fetch(`${url}/cart/add`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",

@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 
 const UserOrders = () => {
   const [orders, setOrders] = useState([]);
+  console.log(orders);
+  const url = "https://showcrew-backend.onrender.com" //|| "http://localhost:3000" "https://showcrew-backend.onrender.com"
 
   useEffect(() => {
     const fetchMyOrders = async () => {
       try {
-        const res = await fetch("https://showcrew-backend.onrender.com/order/my-order", {
+       const res = await fetch(`${url}/order/my-order`, {
           credentials: "include", // include cookies if using sessions
         });
         const data = await res.json();
@@ -21,7 +23,7 @@ const UserOrders = () => {
 
 return (
     <div className="p-6 mt-30">
-      <h2 className="text-xl font-bold mb-4">All Orders (Admin)</h2>
+      <h2 className="text-xl font-bold mb-4">All Orders</h2>
       {orders.length === 0 ? (
         <p>No orders found</p>
       ) : (

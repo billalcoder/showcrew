@@ -11,6 +11,7 @@ export default function ProductForm({ product, onSuccess }) {
     brand: product?.brand || "",
     size: product?.size || "" // single selected size (string)
   });
+  const url = "https://showcrew-backend.onrender.com" //|| "http://localhost:3000" "https://showcrew-backend.onrender.com"
 
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -40,13 +41,13 @@ export default function ProductForm({ product, onSuccess }) {
       if (product?._id) {
         // UPDATE
         res = await axios.put(
-          `https://showcrew-backend.onrender.com/products/${product._id}`,
+          `${url}/products/${product._id}`,
           formData,
           { withCredentials: true }
         );
       } else {
         // CREATE
-        res = await axios.post("https://showcrew-backend.onrender.com/products", data, {
+        res = await axios.post(`${url}/products`, data, {
           withCredentials: true,
           headers: { "Content-Type": "multipart/form-data" },
         });

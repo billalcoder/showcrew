@@ -8,4 +8,26 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+   server: {
+    headers: {
+      "Content-Security-Policy":
+        "default-src 'self'; " +
+        "script-src 'self' 'unsafe-inline' https://api.onesignal.com https://cdn.onesignal.com https://checkout.razorpay.com/v1/checkout.js https://accounts.google.com; " +
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; " +
+        "font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; " +
+        "img-src 'self' data: https://your-cdn.com https://showcrew.s3.us-east-1.amazonaws.com; " +
+        "connect-src 'self' http://localhost:3000 https://showcrew-backend.onrender.com; " + // allow API + HMR
+        "frame-src 'self' https://accounts.google.com https://api.razorpay.com/; " +
+        "object-src 'none'; " +
+        "upgrade-insecure-requests;",
+      "Referrer-Policy": "no-referrer",
+      "Cross-Origin-Embedder-Policy": "unsafe-none",
+      "Cross-Origin-Resource-Policy": "same-origin",
+      "Cross-Origin-Opener-Policy": "same-origin",
+      "X-Frame-Options": "SAMEORIGIN",
+      "X-XSS-Protection": "1; mode=block",
+      "X-Content-Type-Options": "nosniff",
+      "Strict-Transport-Security": "max-age=31536000; includeSubDomains; preload"
+    }
+  }
 })

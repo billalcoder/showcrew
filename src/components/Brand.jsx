@@ -43,7 +43,7 @@ console.log(category);
                 <img
                   src={item.images[0]}
                   alt={item.title}
-                  className="w-full h-64 object-scale-down transition-transform duration-300 group-hover:scale-105"
+                  className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105"
                 />
               </div>
 

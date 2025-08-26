@@ -3,7 +3,7 @@ import { useProducts } from "../context/ProductContext";
 import { Link } from "react-router-dom";
 
 export default function Cart() {
-  const url = "https://showcrew-backend.onrender.com"
+   const url = "https://showcrew-backend.onrender.com" //||"http://localhost:3000" "https://showcrew-backend.onrender.com"
   const { cart, setCart } = useProducts();
   console.log(cart);
   async function addToCart(product, selectedSize) {
@@ -97,7 +97,7 @@ export default function Cart() {
 
   if (cart.length === 0) {
     return (
-      <p className="text-center py-10 text-gray-600 text-lg">
+      <p className="text-center py-10 text-gray-600 text-lg mt-30">
         No product here to see. Add the product here...
       </p>
     );

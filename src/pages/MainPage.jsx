@@ -7,10 +7,10 @@ export default function MainPage() {
 
     async function guest() {
         try {
-            const userId = await fetch(`${url}guest/get`, { credentials: "include" })
+            const userId = await fetch(`${url}/guest/get`, { credentials: "include" })
             const userdata = await userId.json()
             if (!userdata.sid) {
-                const res = await fetch(`${url}guest`, { credentials: "include" })
+                const res = await fetch(`${url}/guest`, { credentials: "include" })
                 const s = await res.json()
             } else {
                 console.log("user is logged in");
@@ -23,7 +23,7 @@ export default function MainPage() {
     useEffect(() => {
         guest()
     }, [])
-      const url = "https://showcrew-backend.onrender.com/"
+      const url = "https://showcrew-backend.onrender.com" //|| "http://localhost:3000" "https://showcrew-backend.onrender.com"
 
     return (
         <>

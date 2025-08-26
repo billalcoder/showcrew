@@ -6,7 +6,7 @@ export function ProductList() {
   const [products, setProducts] = useState([]);
   const [editingProduct, setEditingProduct] = useState(null);
 
-  const url = "https://showcrew-backend.onrender.com"
+const url = "https://showcrew-backend.onrender.com" //|| "http://localhost:3000" "https://showcrew-backend.onrender.com"
   const fetchProducts = async () => {
     try {
       const res = await axios.get(`${url}/products/all`, {
