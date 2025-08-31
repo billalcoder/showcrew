@@ -1,5 +1,5 @@
-import React from "react";
-import { useLocation, Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useLocation, Link, useParams } from "react-router-dom";
 import { useProducts } from "../context/ProductContext";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Thumbs } from "swiper/modules";
@@ -8,7 +8,12 @@ import "swiper/css/navigation";
 import "swiper/css/thumbs";
 
 export default function Product() {
+    const { product: id } = useParams()
+    // console.log(id);
+    const [singlepro, setSinglePro] = useState([])
+    console.log(singlepro);
     const { state } = useLocation();
+    // console.log(state);
     const { products, loading, setCart } = useProducts();
     const [thumbsSwiper, setThumbsSwiper] = React.useState(null);
     const [selectedSize, setSelectedSize] = React.useState("");
@@ -35,10 +40,25 @@ export default function Product() {
         }
     }
 
-    if (loading) return <p className="text-center py-10">Loading...</p>;
-    if (!state) return <p className="text-center py-10">No product found.</p>;
+    useEffect(() => {
+        async function productDetail() {
+            try {
+                if (!state && id) {   // ✅ condition yaha pe
+                    const res = await fetch(`${url}/products/${id}`);
+                    const data = await res.json();
+                    console.log(data);
+                    setSinglePro(data);
+                }
+            } catch (err) {
+                console.error("Failed to fetch product", err);
+            }
+        }
 
-    const product = state;
+        productDetail();
+    }, [state, id]);
+
+    if (loading) return <p className="text-center py-10">Loading...</p>;
+    const product = state || singlepro;
     const related = products.filter(
         (p) =>
             p.category?.toLowerCase() === product.category?.toLowerCase() &&
@@ -147,7 +167,7 @@ export default function Product() {
                         <button className="bg-green-500 text-white py-2 px-4 rounded">
                             <a
                                 href={`https://wa.me/917420864014?text=${encodeURIComponent(
-                                    `*${product.title}*\n₹ ${product.price.toLocaleString(
+                                    `*${product.title}*\n₹ ${product.price?.toLocaleString(
                                         "en-IN"
                                     )}\n${window.location.href}`
                                 )}`}

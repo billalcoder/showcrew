@@ -56,13 +56,13 @@ console.log(products);
 
             {/* Price */}
             <p className="mt-1 text-sm">
-              <span className="line-through text-gray-400 mr-2">
+              {/* <span className="line-through text-gray-400 mr-2">
                 ₹
                 {(
                   product.price /
                   (1 - product.discountPercentage / 100)
                 ).toFixed(0)}
-              </span>
+              </span> */}
               <span className="text-lg font-bold text-black">
                 ₹{product.price}
               </span>
