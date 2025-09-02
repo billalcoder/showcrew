@@ -1,5 +1,5 @@
 import React from 'react'
-import viteLogo from '/animation.mp4'
+import viteLogo from '/background_720p.webm'
 
 export function Hero() {
   return (
@@ -7,13 +7,13 @@ export function Hero() {
       {/* Video Background */}
       <video
         className="absolute top-0 left-0 w-full h-full object-cover"
-        preload="auto"
+        preload="none"
         playsInline
         autoPlay
         muted
         loop
       >
-        <source src={viteLogo} type="video/mp4" />
+        <source src={viteLogo} type="video/webm" />
       </video>
 
       {/* Overlay Text */}

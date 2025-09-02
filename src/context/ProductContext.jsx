@@ -1,6 +1,6 @@
-// ProductContext.jsx
-import { createContext, useContext, useEffect, useState } from "react";
-const url = "https://showcrew-backend.onrender.com" //|| "http://localhost:3000" "https://showcrew-backend.onrender.com"
+import { createContext, useContext, useEffect, useState, useMemo } from "react";
+
+const url = "https://showcrew-backend.onrender.com";
 const ProductContext = createContext();
 
 export const ProductProvider = ({ children }) => {
@@ -8,7 +8,7 @@ export const ProductProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // ✅ Fetch products
+  // Fetch products
   useEffect(() => {
     fetch(`${url}/products/all`, { credentials: "include" })
       .then(res => res.json())
@@ -22,37 +22,32 @@ export const ProductProvider = ({ children }) => {
       });
   }, []);
 
-  // ✅ Fetch cart on first load
+  // Fetch cart
   useEffect(() => {
     fetch(`${url}/cart`, { credentials: "include" })
       .then(res => res.json())
       .then(data => {
         if (data.cart) setCart(data.cart);
       })
-      .catch(err => {
-        console.error("Error fetching cart:", err);
-      });
+      .catch(err => console.error("Error fetching cart:", err));
   }, []);
 
-  // ✅ Add to Cart
+  // Cart actions
   const addToCart = async (productId, quantity = 1) => {
     try {
       const res = await fetch(`${url}/cart/add`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include", // 🔑 important (cookies for sid/gid)
+        credentials: "include",
         body: JSON.stringify({ productId, quantity }),
       });
       const data = await res.json();
-      if (data.cart) {
-        setCart(data.cart); // ✅ update context
-      }
+      if (data.cart) setCart(data.cart);
     } catch (err) {
       console.error("Failed to add to cart:", err);
     }
   };
 
-  // ✅ Remove from Cart
   const removeFromCart = async (id) => {
     try {
       const res = await fetch(`${url}/cart/remove/${id}`, {
@@ -60,16 +55,20 @@ export const ProductProvider = ({ children }) => {
         credentials: "include",
       });
       const data = await res.json();
-      if (data.cart) {
-        setCart(data.cart);
-      }
+      if (data.cart) setCart(data.cart);
     } catch (err) {
       console.error("Failed to remove item", err);
     }
   };
 
+  // ✅ Memoize context value
+  const value = useMemo(
+    () => ({ products, loading, cart, setCart, addToCart, removeFromCart }),
+    [products, loading, cart] // only change if these change
+  );
+
   return (
-    <ProductContext.Provider value={{ products, loading, cart, setCart, addToCart, removeFromCart }}>
+    <ProductContext.Provider value={value}>
       {children}
     </ProductContext.Provider>
   );

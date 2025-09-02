@@ -29,16 +29,11 @@ export default function MainPage() {
         <>
             <Hero />
             <Branding />
-            {/* <ProductSection
-                title="3113"
-                description="Upto 50% Off On Groceries | QUALITY | FREASH PRODUCT"
-                category="1313"
-            />
             <ProductSection
                 title="MEN'S WATCH"
                 description="Upto 50% Off On Fragrances | BEST QUALITY | GOOD"
                 category="2121"
-            /> */}
+            />
         </>
     )
 }

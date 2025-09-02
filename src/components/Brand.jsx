@@ -7,7 +7,6 @@ export default function Brand() {
   const data = useLocation();
   const [category, setCategory] = useState([]);
   const { products, loading } = useProducts();
-console.log(category);
   // Filter products when products or category changes
   useEffect(() => {
     if (products.length > 0 && data.state) {
@@ -43,6 +42,7 @@ console.log(category);
                 <img
                   src={item.images[0]}
                   alt={item.title}
+                  loading="lazy"
                   className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105"
                 />
               </div>

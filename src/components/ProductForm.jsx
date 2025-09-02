@@ -77,10 +77,10 @@ export default function ProductForm({ product, onSuccess }) {
   };
 
   // 🔹 Sizes for dropdown: 7 to 12 including decimals
-  const sizes = [];
-  for (let i = 7; i <= 12; i += 0.1) {
-    sizes.push(i.toFixed(1));
-  }
+  // const sizes = [];
+  // for (let i = 7; i <= 12; i += 0.1) {
+  //   sizes.push(i.toFixed(1));
+  // }
 
   return (
     <form
@@ -139,7 +139,7 @@ export default function ProductForm({ product, onSuccess }) {
       />
 
       {/* 🔹 Dropdown for sizes */}
-      <select
+      {/* <select
         name="size"
         value={formData.size}
         onChange={handleChange}
@@ -151,7 +151,7 @@ export default function ProductForm({ product, onSuccess }) {
             {s}
           </option>
         ))}
-      </select>
+      </select> */}
 
       <input
         type="file"

@@ -1,22 +1,19 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import ProductForm from "./ProductForm";
-
 export function ProductList() {
   const [products, setProducts] = useState([]);
   const [editingProduct, setEditingProduct] = useState(null);
 
-const url = "https://showcrew-backend.onrender.com" //|| "http://localhost:3000" "https://showcrew-backend.onrender.com"
-  const fetchProducts = async () => {
+  const url = "https://showcrew-backend.onrender.com" //|| "http://localhost:3000" "https://showcrew-backend.onrender.com"
+  const fetchProducts = useCallback(async () => {
     try {
-      const res = await axios.get(`${url}/products/all`, {
-        withCredentials: true,
-      });
+      const res = await axios.get(`${url}/products/all`, { withCredentials: true });
       setProducts(res.data);
     } catch (err) {
       console.error(err);
     }
-  };
+  }, [url]);
 
   const deleteProduct = async (id) => {
     if (!window.confirm("Are you sure you want to delete this product?")) return;
@@ -72,7 +69,7 @@ const url = "https://showcrew-backend.onrender.com" //|| "http://localhost:3000"
               </tr>
             ) : (
               products.map((p) => (
-              
+
                 <tr key={p._id}>
                   <td className="p-2 border">{p.title}</td>
                   <td className="p-2 border">${p.price}</td>
